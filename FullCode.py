@@ -90,7 +90,7 @@ Border = 26
 DisplayBorderThickness = 26
 SampleRadius = 6
 
-print(f"Connected to camera. \nPress 'q' after aligning the 3x3 grid with your own.")
+print(f"Connected to camera. Initializing the Crafting Table Overlay™... \nPress 'q' after aligning the 3x3 grid with your own.")
 
 while True:
     Ret, Frame = Video.read()
@@ -138,6 +138,16 @@ while True:
 
 Video.release()
 cv.destroyAllWindows()
+
+Temp = [row[:] for row in GridColor]
+
+GridColor = [row[::-1] for row in Temp[::-1]]
+GridColor[1][1] = '-'
+
+print("[")
+for row in GridColor:
+    print(" ".join(row))
+print("]")
 
 #Dobot________________________________________________________________________________
 
@@ -211,6 +221,7 @@ go_to_block(0, 0, 1+margin)
 
 #Mix________________________________________________________________________________
 
+
 print(f"\nCreating a tower from block around the center [R,G,B,Y]")
 print("Getting information from the base to the top:")
 ValidColor = [None] * 4
@@ -224,8 +235,7 @@ while i<4:
         print("Invalid, please re-enter")
     else:
         i = i+1
-
-GridColor[1][1] = '-' #Center    
+  
 print(GridColor)
 
 CoordMap = {
@@ -259,4 +269,8 @@ for k in range(4):
 
 go_to_block(0, 0, 5)
 
-print(GridColor)
+
+print("[")
+for row in GridColor:
+    print(" ".join(row))
+print("]")
