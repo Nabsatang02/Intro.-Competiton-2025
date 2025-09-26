@@ -163,29 +163,46 @@ def go_to_block(cordx, cordy, cordz):
         device.move_to(x = home[0] + (cordx * gap[0]), y = home[1] + (cordy * gap[1]), z = home[2] + (cordz * gap[2]), r = 0)
 
 def stack_from_block(cordx, cordy, margin, cycle):
-                # Common initial moves
-                z_margin = home[2] + ((cycle + margin) * gap[2])
-                x_pos = home[0] + (cordx * gap[0])
-                y_pos = home[1] + (cordy * gap[1])
-                if cycle == 1:
-                        device.move_to(x=home[0], y=home[1], z=z_margin, r=0)  # Move up a margin at 0 0
-                        device.move_to(x=x_pos, y=y_pos, z=z_margin, r=0)  # move to x y with margin
-                else:
-                        device.move_to(x=home[0], y=home[1], z=home[2] + ((cycle -1 + margin) * gap[2]), r=0)  # Move up a margin at 0 0
-                        device.move_to(x=x_pos, y=y_pos, z=home[2] + ((cycle -1 + margin) * gap[2]), r=0)  # move to x y with margin        
-                device.move_to(x=x_pos, y=y_pos, z=home[2] + (1 * gap[2]), r=0)  # move down to block
-                device.suck(True)  # enable suction
-                # Move back up, with extra height if cycle == 1
-                if cycle == 1:
-                        z_lift = home[2] + ((cycle + margin + 1) * gap[2])
-                        device.move_to(x=x_pos, y=y_pos, z=z_lift, r=0)  # move back to x y with margin and z +1
-                        device.move_to(x=home[0], y=home[1], z=z_lift, r=0)  # Move to 0 0 with z +1 and margin
-                else:
-                        device.move_to(x=x_pos, y=y_pos, z=z_margin, r=0)  # move back to x y with margin
-                        device.move_to(x=home[0], y=home[1], z=z_margin, r=0)  # Move to 0 0 with margin
-                device.move_to(x=home[0], y=home[1], z=home[2] + (cycle * gap[2]), r=0)  # Move down
-                device.suck(False)  # disable suction
+    # Common initial moves
+    z_margin = home[2] + ((cycle + margin) * gap[2])
+    x_pos = home[0] + (cordx * gap[0])
+    y_pos = home[1] + (cordy * gap[1])
+    if cycle == 1:
+            device.move_to(x=home[0], y=home[1], z=z_margin, r=0)  # Move up a margin at 0 0
+            device.move_to(x=x_pos, y=y_pos, z=z_margin, r=0)  # move to x y with margin
+    else:
+            device.move_to(x=home[0], y=home[1], z=home[2] + ((cycle -1 + margin) * gap[2]), r=0)  # Move up a margin at 0 0
+            device.move_to(x=x_pos, y=y_pos, z=home[2] + ((cycle -1 + margin) * gap[2]), r=0)  # move to x y with margin        
+    device.move_to(x=x_pos, y=y_pos, z=home[2] + (1 * gap[2]), r=0)  # move down to block
+    device.suck(True)  # enable suction
+    # Move back up, with extra height if cycle == 1
+    if cycle == 1:
+            z_lift = home[2] + ((cycle + margin + 1) * gap[2])
+            device.move_to(x=x_pos, y=y_pos, z=z_lift, r=0)  # move back to x y with margin and z +1
+            device.move_to(x=home[0], y=home[1], z=z_lift, r=0)  # Move to 0 0 with z +1 and margin
+    else:
+            device.move_to(x=x_pos, y=y_pos, z=z_margin, r=0)  # move back to x y with margin
+            device.move_to(x=home[0], y=home[1], z=z_margin, r=0)  # Move to 0 0 with margin
+    device.move_to(x=home[0], y=home[1], z=home[2] + (cycle * gap[2]), r=0)  # Move down
+    device.suck(False)  # disable suction
         
+
+def slide(cordx, cordy, margin):
+    cycle = 1
+    # Common initial moves
+    z_margin = home[2] + ((cycle + margin) * gap[2])
+    x_pos = home[0] + (cordx * gap[0])
+    y_pos = home[1] + (cordy * gap[1])
+    device.move_to(x=home[0], y=home[1], z=z_margin, r=0)  # Move up a margin at 0 0
+    device.move_to(x=x_pos, y=y_pos, z=z_margin, r=0)  # move to x y with margin
+    device.move_to(x=x_pos, y=y_pos, z=home[2] + (1 * gap[2]), r=0)  # move down to block
+    device.suck(True)  # enable suction
+    # Move back up, with extra height if cycle == 1
+    device.move_to(x=x_pos, y=y_pos, z=z_margin-2, r=0)  # move back to x y with margin
+    device.move_to(x=home[0], y=home[1], z=z_margin-2, r=0)  # Move to 0 0 with margin
+    device.move_to(x=home[0], y=home[1], z=home[2] + (cycle * gap[2]), r=0)  # Move down
+    device.suck(False)  # disable suction
+
 #Homing
 # device.home()
 
@@ -252,20 +269,31 @@ CoordMap = {
 
 temp = 0
 
+Grid=[
+    ['B','R','Y'],
+    ['G','-','B'],
+    ['G','R','Y']
+]
 
 for k in range(4):
     moved = False
     for i in range(3):
         for j in range(3):
-            if GridColor[i][j] == ValidColor[k]:
+            if Grid[i][j] == ValidColor[k]:
                 x, y = CoordMap[(i,j)]  # convert to Dobot coordinates
-                stack_from_block(x, y, margin, k+1)
-                print(f" Dobot move command for color {ValidColor[k]} at ({i},{j}) -> ({x},{y})\n")
+
+                # use slide only for these 4 coordinates
+                if (x, y) in [(1,0), (0,-1), (0,1), (-1,0)] and k == 0:
+                    slide(x, y, margin)
+                else:
+                    stack_from_block(x, y, margin, k+1)
+
+                print(f"Dobot move command for color {ValidColor[k]} at ({i},{j}) -> ({x},{y})\n")
                 moved = True
-                GridColor[i][j] = '0'
-                break  # stop inner loop after first match
+                Grid[i][j] = '0'  # mark as handled
+                break  # stop inner loop
         if moved:
-            break  # stop outer loop after first match
+            break  # stop outer loop
 
 go_to_block(0, 0, 5)
 
