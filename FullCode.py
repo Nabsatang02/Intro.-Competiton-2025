@@ -62,13 +62,16 @@ def SamplePatchAvgHsv(Frame, Cx, Cy, Radius=6):
 import cv2 as cv
 import numpy as np
 from pydobot import Dobot
+from Cowsay import cowsay
 import os
 import json
 
 #Identifier
+ref = "ea5281feb7d3761ecaff1529b75ca3baad4855fe"
 print("\nIdentifier:")
-print("Intro. Competition 2025 - Ref: 634f413bf81ecf41fa3feb2b287335aa730dea9c")
-print("https://github.com/Nabsatang02/Intro.-Competiton-2025")
+print("Intro. Competition 2025 - Ref: ", ref)
+print("https://github.com/Nabsatang02/Intro.-Competiton-2025\n")
+cowsay("Holy Cow!")
 
 print(f"\nStarting the program...")
 
