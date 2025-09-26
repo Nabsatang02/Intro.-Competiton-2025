@@ -248,11 +248,6 @@ for k in range(4):
     moved = False
     for i in range(3):
         for j in range(3):
-            # skip the special 4th color if it is at (0,1)
-            if ValidColor[2] == ValidColor[3] and i == 0 and j == 1 and GridColor[i][j] == ValidColor[3]:
-                temp=1
-            elif GridColor[0][1] == ValidColor[3] and i == 0 and j == 1 and GridColor[i][j] == ValidColor[3]:
-                continue
             if GridColor[i][j] == ValidColor[k]:
                 x, y = CoordMap[(i,j)]  # convert to Dobot coordinates
                 stack_from_block(x, y, margin, k+1)
