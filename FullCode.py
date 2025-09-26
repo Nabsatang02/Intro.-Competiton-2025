@@ -65,8 +65,6 @@ from pydobot import Dobot
 import os
 import json
 
-# import times
-
 #Identifier
 print("\nIdentifier:")
 print("Intro. Competition 2025 - Ref: 634f413bf81ecf41fa3feb2b287335aa730dea9c")
@@ -179,7 +177,6 @@ def stack_from_block(cordx, cordy, margin, cycle):
                 device.suck(False)  # disable suction
         
 #Homing
-
 # device.home()
 
 # Calibration persistence via JSON
@@ -190,6 +187,8 @@ if os.path.exists(calibration_file):
         home = calibration["home"]
         gap = calibration["gap"]
         print("Loaded calibration:", home, gap)
+        input("Done Calibration, moving back?")
+
 else:
         input("Home?")
         ((x, y, z, r),(j1, j2, j3, j4)) = device.get_pose()
@@ -204,9 +203,9 @@ else:
         with open(calibration_file, "w") as f:
                 json.dump(calibration, f)
         print("Calibration saved.")
+        print("Done Calibration, moving back")
+        go_to_block(1, 1, 1+margin)
 
-print("Done Calibration, moving back")
-go_to_block(1, 1, 1+margin)
 go_to_block(0, 0, 1+margin)
 
 
