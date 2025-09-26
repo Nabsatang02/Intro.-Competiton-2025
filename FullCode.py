@@ -69,7 +69,7 @@ import json
 
 #Identifier
 print("\nIdentifier:")
-print("Intro. Competition 2025 - Ref: c15a4c20c2ba7997e4495665b8d60b7bdcf65b02")
+print("Intro. Competition 2025 - Ref: 634f413bf81ecf41fa3feb2b287335aa730dea9c")
 print("https://github.com/Nabsatang02/Intro.-Competiton-2025")
 
 print(f"\nStarting the program...")
