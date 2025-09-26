@@ -272,17 +272,12 @@ CoordMap = {
 
 temp = 0
 
-Grid=[
-    ['B','R','Y'],
-    ['G','-','B'],
-    ['G','R','Y']
-]
 
 for k in range(4):
     moved = False
     for i in range(3):
         for j in range(3):
-            if Grid[i][j] == ValidColor[k]:
+            if GridColor[i][j] == ValidColor[k]:
                 x, y = CoordMap[(i,j)]  # convert to Dobot coordinates
 
                 # use slide only for these 4 coordinates
@@ -293,7 +288,7 @@ for k in range(4):
 
                 print(f"Dobot move command for color {ValidColor[k]} at ({i},{j}) -> ({x},{y})\n")
                 moved = True
-                Grid[i][j] = '0'  # mark as handled
+                GridColor[i][j] = '0'  # mark as handled
                 break  # stop inner loop
         if moved:
             break  # stop outer loop
