@@ -67,6 +67,11 @@ import json
 
 # import times
 
+#Identifier
+print("\nIdentifier:")
+print("Intro. Competition 2025 - Ref: a31a4ad9c7ac57c18192f6a2d7fccaa1f18b83e6")
+print("https://github.com/Nabsatang02/Intro.-Competiton-2025")
+
 print(f"\nStarting the program...")
 
 ##############################################################################################
