@@ -162,7 +162,7 @@ device = Dobot('/dev/serial/by-id/usb-Silicon_Labs_CP2102_USB_to_UART_Bridge_Con
 print("Connecting to Dobot...")
 
 #variable
-margin = 0.5
+margin = 0.22
 
 #Functions
 def go_to_block(cordx, cordy, cordz):
@@ -210,7 +210,7 @@ def slide(cordx, cordy, margin):
     device.suck(False)  # disable suction
 
 #Homing
-device.home()
+# device.home()
 
 # Calibration persistence via JSON
 calibration_file = "calibration.json"
@@ -247,11 +247,11 @@ go_to_block(0, 0, 1+margin)
 
 print(f"\nCreating a tower from block around the center [R,G,B,Y]")
 print("Getting information from the base to the top:")
-ValidColor = [None] * 4
+ValidColor = [None] * 5
 ColourInitial = ['R', 'G', 'B', 'Y']
 ColourLocation = np.full((3, 3), '0', dtype='int')
 i=0
-while i<4:
+while i<5:
     ValidColor[i] = input("Enter color[" + str(i+1) + "]: ")
     ValidColor[i] = ValidColor[i].upper()
     if ValidColor[i] not in ColourInitial:
@@ -275,6 +275,7 @@ CoordMap = {
 
 temp = 0
 
+#R Y G G Y
 
 for k in range(4):
     moved = False
@@ -306,7 +307,12 @@ for k in range(4):
         if moved:
             break  # stop outer loop
 
-go_to_block(0,0,5)
+xbruh = float(input("x: "))
+ybruh = float(input("y: "))
+stack_from_block(xbruh,ybruh,margin, 5)
+print(f"Dobot move command for color {ValidColor[5]} at ({i},{j}) -> ({x},{y})\n")
+
+# # go_to_block(0,0,5)
 
 print("[")
 for row in GridColor:
