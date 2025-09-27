@@ -62,7 +62,7 @@ def SamplePatchAvgHsv(Frame, Cx, Cy, Radius=6):
 import cv2 as cv
 import numpy as np
 from pydobot import Dobot
-from Cowsay import cowsay
+# from Cowsay import cowsay
 import os
 import json
 
@@ -71,7 +71,7 @@ ref = "ea5281feb7d3761ecaff1529b75ca3baad4855fe"
 print("\nIdentifier:")
 print("Intro. Competition 2025 - Ref: ", ref)
 print("https://github.com/Nabsatang02/Intro.-Competiton-2025\n")
-cowsay("Holy Cow!")
+# cowsay("Holy Cow!")
 
 print(f"\nStarting the program...")
 
@@ -142,13 +142,16 @@ while True:
 Video.release()
 cv.destroyAllWindows()
 
+T = [row[:] for row in GridColor]  # makes a new list of lists
+
 Temp = [row[:] for row in GridColor]
 
 GridColor = [row[::-1] for row in Temp[::-1]]
+
 GridColor[1][1] = '-'
 
 print("[")
-for row in GridColor:
+for row in T:
     print(" ".join(row))
 print("]")
 
@@ -207,7 +210,7 @@ def slide(cordx, cordy, margin):
     device.suck(False)  # disable suction
 
 #Homing
-# device.home()
+device.home()
 
 # Calibration persistence via JSON
 calibration_file = "calibration.json"
@@ -276,7 +279,17 @@ temp = 0
 for k in range(4):
     moved = False
     for i in range(3):
-        for j in range(3):
+        for j in range(3):            
+
+            # uncomment here if collide with the dam tower
+            # # >>> if the dobot hand colided with 3 block stack
+            # skip the special 4th color if it is at (0,1)
+            # if ValidColor[2] == ValidColor[3] and i == 0 and j == 1 and GridColor[i][j] == ValidColor[3]:
+            #     temp=1
+            # elif GridColor[0][1] == ValidColor[3] and i == 0 and j == 1 and GridColor[i][j] == ValidColor[3]:
+            #     continue
+            # # <<< if the dobot hand colided with 3 block stack
+
             if GridColor[i][j] == ValidColor[k]:
                 x, y = CoordMap[(i,j)]  # convert to Dobot coordinates
 
@@ -293,8 +306,7 @@ for k in range(4):
         if moved:
             break  # stop outer loop
 
-go_to_block(0, 0, 5)
-
+go_to_block(0,0,5)
 
 print("[")
 for row in GridColor:
